@@ -1,0 +1,20 @@
+{
+  "staging": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-letschat-staging-163159-authRole",
+      "UnauthRoleArn": "arn:aws:iam::887199363834:role/amplify-letschat-staging-163159-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::887199363834:role/amplify-letschat-staging-163159-authRole",
+      "Region": "us-east-2",
+      "DeploymentBucketName": "amplify-letschat-staging-163159-deployment",
+      "UnauthRoleName": "amplify-letschat-staging-163159-unauthRole",
+      "StackName": "amplify-letschat-staging-163159",
+      "StackId": "arn:aws:cloudformation:us-east-2:887199363834:stack/amplify-letschat-staging-163159/ea05bfe0-4364-11ee-b8ab-0ae870b7b3af",
+      "AmplifyAppId": "d2x692hw6he1nd"
+    },
+    "categories": {
+      "auth": {
+        "LetsChat": {}
+      }
+    }
+  }
+}
