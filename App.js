@@ -8,18 +8,15 @@ import awsconfig from './src/aws-exports';
 import { getUser } from './src/graphql/queries';
 import { createUser } from './src/graphql/mutations';
 
+
 Amplify.configure({...awsconfig, Analytics: { disabled: true }});
 
 function App() {
-  console.log("Initializing app..");
-
   useEffect(() => {
     const syncUser = async () => {
       const authUser = await Auth.currentAuthenticatedUser({bypassCache: true});
-      const userData = await API.graphql(graphqlOperation(getUser, { id: authUser.attributes.sub }));
-      console.log("User: " + userData.data.getUser);
+      const userData = await API.graphql(graphqlOperation(getUser, {id: authUser.attributes.sub}));
       if(userData.data.getUser) {
-        console.log("User already exists in DB");
         return;
       }
 
