@@ -1,15 +1,33 @@
 import { useState } from 'react';
 import { View, StyleSheet, TextInput } from 'react-native';
-import { MaterialIcons, Entypo } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { API, graphqlOperation, Auth } from 'aws-amplify';
+import { createMessage, updateChatRoom } from '../../graphql/mutations';
 
-const InputBox = () => {
-  const [newMessage, setNewMessage] = useState('');
+const InputBox = ({ chatroom }) => {
+  const [text, setText] = useState("");
 
-  const onSend = () => {
-    console.warn('Sending a new message: ', newMessage);
+  const onSend = async () => {
+    console.warn('Sending a new message: ', text);
 
-    setNewMessage('');
+    const authUser = await Auth.currentAuthenticatedUser();
+
+    const newMessage = {
+      chatroomID: chatroom.id,
+      text,
+      userID: authUser.attributes.sub,
+    };
+
+    const newMessageData = await API.graphql(graphqlOperation(createMessage, { input: newMessage }));
+
+    setText("");
+
+    await API.graphql(graphqlOperation(updateChatRoom, {input: {
+      _version: chatroom._version,
+      chatRoomLastMessageId: newMessageData.data.createMessage.id,
+      id: chatroom.id,
+    }}));
   };
 
   return (
@@ -17,11 +35,10 @@ const InputBox = () => {
       <View style={styles.mainContainer}>
         <TextInput
           style={styles.textInput}
-          value={newMessage}
-          onChangeText={setNewMessage}
+          value={text}
+          onChangeText={setText}
           placeholder="Type your message.."
         />
-        {!newMessage && <Entypo name="camera" size={24} color="grey" style={styles.icon} />}
       </View>
       <MaterialIcons onPress={onSend} style={styles.send} name="send" size={28} color="white" />
     </View>
